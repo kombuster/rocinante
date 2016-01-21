@@ -1,0 +1,22 @@
+{
+  "name": "node-ioc",
+  "version": "1.0.0",
+  "description": "Node.js IOC framework for ES6",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kombuster/node-ioc.git"
+  },
+  "keywords": [
+    "ioc"
+  ],
+  "author": "Alex Soldatov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kombuster/node-ioc/issues"
+  },
+  "homepage": "https://github.com/kombuster/node-ioc#readme"
+}
