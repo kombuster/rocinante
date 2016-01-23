@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/kombuster/node-ioc/issues"
   },
-  "homepage": "https://github.com/kombuster/node-ioc#readme"
+  "homepage": "https://github.com/kombuster/node-ioc#readme",
+  "dependencies": {
+    "require-dir": "^0.3.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-watch": "^4.3.5"
+  }
 }
