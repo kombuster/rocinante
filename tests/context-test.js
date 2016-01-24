@@ -24,10 +24,11 @@ module.exports = {
 	underTest: { path: './../context', buildWith: [register] },
 	
 
-	testConstructorInjector:function(mut) {
-		assert(mut, 'module under test is instantiated');
-		assert(mut.register, 'register is assigned');
-		var instance = mut.build('consumer');
+	testConstructorInjector:function(ctx) {
+		assert(ctx, 'module under test is instantiated');
+		assert(ctx.register, 'register is assigned');
+		var instance = ctx.build('consumer');
+
 		// var consumer = mut
 		// .register(Provider, 'provider')
 		// .register(Consumer, 'consumer')

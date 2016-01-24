@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/kombuster/rocinante#readme",
   "dependencies": {
-    "require-dir": "^0.3.0"
+    "require-dir": "^0.3.0",
+    "string": "^3.3.1"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
