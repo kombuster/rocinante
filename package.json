@@ -1,14 +1,14 @@
 {
-  "name": "node-ioc",
+  "name": "rocinante",
   "version": "1.0.0",
-  "description": "Node.js IOC framework for ES6",
+  "description": "Minimalist Node.js IOC framework for ES6",
   "main": "index.js",
   "scripts": {
     "test": "gulp test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kombuster/node-ioc.git"
+    "url": "git+https://github.com/kombuster/rocinante.git"
   },
   "keywords": [
     "ioc"
@@ -16,9 +16,9 @@
   "author": "Alex Soldatov",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kombuster/node-ioc/issues"
+    "url": "https://github.com/kombuster/rocinante/issues"
   },
-  "homepage": "https://github.com/kombuster/node-ioc#readme",
+  "homepage": "https://github.com/kombuster/rocinante#readme",
   "dependencies": {
     "require-dir": "^0.3.0"
   },
