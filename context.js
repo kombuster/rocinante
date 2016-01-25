@@ -1,63 +1,96 @@
 'use strict';
+
 const readline = require('readline');
 const fs = require('fs');
 const S = require('string');
+const assert = require('assert');
 
-class Context {
-	constructor(register) {
-		this.register = register;
-		this.map = {};
-		for(var key in this.register) {
-			this.map[key] = {
-				source: this.register[key],
-				instance: null
-			}	
+var descriptors = {};
+
+
+class TypeDescriptor {
+	
+	constructor(type, ctx, typeInfo) {
+		this.ctx = ctx;
+		this.type = type;
+		this.typeInfo = typeInfo;
+	}
+
+	inject() {
+		this._inject = Array.from(arguments);
+		return this;
+	}
+
+	autowire() {
+		this._autowire = Array.from(arguments);
+		return this;
+	}
+
+	resolveShared() {
+		if (this._instance) {
+			return this._instance;
 		}
+
+		//total hack
+		if (this._inject) {
+			this._instance = new this.type(this._inject[0], this._inject[1], this._inject[2], this._inject[3], this._inject[4]);
+		} else {
+			this._instance = new this.type();
+		}
+		
+		this._instance.descriptor = this;
+
+		if (this._autowire) {
+			for(let obj of this._autowire) {
+				var key = obj.descriptor.typeInfo.key;
+				this._instance[key] = obj;
+			}
+		}
+
+		return this._instance;
+	}
+
+}
+
+function processType(type) {
+	var lines = (type + '').split('\n');
+	var regex = new RegExp('(?:^|\s)class ' + className);
+	var constructorRegex = /(?:^|\s)constructor\s?\(/;	
+	var className = lines[0].trim().split(' ')[1];
+	var camelized = className.substring(0,1).toLowerCase() + className.substring(1, className.length);
+	for(let line of lines) {
 
 	}
 
-	build(classRef) {
-		if(this.map[classRef].instance) {
-			console.log('already have instance');
-			return instance;
-		} else {
-			var className = classRef.substring(0,1).toUpperCase() + classRef.substring(1, classRef.length);
-			var regex = new RegExp('(?:^|\s)class ' + className);
-			var constructorRegex = /(?:^|\s)constructor\s?\(/;
-			var reader = readline.createInterface( { input: fs.createReadStream(this.map[classRef].source) } );
-			var search = line =>  {
-  			if (line.match(regex)) {
-  				//console.log(line);
-  				search = line => {
-  					if (line.match(constructorRegex)) {
-  						//console.log(line);
-  						var args = S(line).between('(', ')').s.split(',').map(s => { 
-  							var key = s.trim();
-  							if (!key) {
-  								return null;
-  							}
-  							//console.log('looking for:', key);
-  							return this.build(s.trim()); 
-  						});
-  						return true;
-  					} 
-  				};
-  			}
-  			return false;
-			};
-			reader.on('line', line => {
-				if (search && search(line)) {
-					search = null;
-					reader.close();
-				}
-			});
-			var type = require(this.map[classRef].source);
-			this.map[classRef].instance = new type(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+	return { className, camelized };
+}
 
-		}
-		return this;
+class Context {
+	register(type, key) {
+		var typeInfo = processType(type);
+		key = key || typeInfo.camelized;
+		typeInfo.key = key;
+		assert(descriptors[key] == null, 'key ' + key + ' is already in use');
+		var descriptor = new TypeDescriptor(type, this, typeInfo);
+		descriptors[key] = descriptor;
+		Object.defineProperty(this, key, {
+			get:function() {
+				var descriptor = descriptors[key];
+				assert(descriptor, 'requested key ' + key + ' is not registered');
+				return descriptor.resolveShared();
+			},
+			set:function(newValue) {
+
+			}
+		});
+		return descriptor;
+	}
+
+	status() {
+		console.log('hi');
 	}
 }
 
+const ctx = new Context();
 
-module.exports = Context;
+module.exports = ctx;
