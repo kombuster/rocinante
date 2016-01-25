@@ -4,6 +4,7 @@ const readline = require('readline');
 const fs = require('fs');
 const S = require('string');
 const assert = require('assert');
+const path = require('path');
 
 var descriptors = {};
 
@@ -75,7 +76,16 @@ function processType(type) {
 }
 
 class Context {
+	constructor(baseDir) {
+		this.baseDir = baseDir || __dirname;
+		descriptors = {};
+	}
+
 	register(type, key) {
+		if (typeof type === 'string') {
+			var source = path.resolve(this.baseDir,type);
+			type = require(source);
+		}
 		var typeInfo = processType(type);
 		key = key || typeInfo.camelized;
 		typeInfo.key = key;
@@ -98,6 +108,11 @@ class Context {
 	status() {
 		console.log('hi');
 	}
+
+	create(baseDir) {
+		return new Context(baseDir);
+	}
+
 }
 
 const ctx = new Context();

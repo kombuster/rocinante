@@ -6,7 +6,7 @@ var
 
 //var tests_dir = path.join(__dirname, '/../../tests');
 var tests_path = path.join(__dirname, '/../../tests/*.js');
-var source_path = path.join(__dirname, '/../../*.js');
+
 
 gulp.task('test', function (done) {
 	taico.tests(tests_path).run(done, { watch: true});
