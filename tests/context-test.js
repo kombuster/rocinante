@@ -5,11 +5,9 @@ const ctx = require('./../index');
 class Provider {
 	constructor(){ }
 }
-
-//this will register class under camelized class name
-//it will be available via ctx.provider
+// this will register class under camelized class name
+// the instance will be available via ctx.provider
 ctx.register(Provider);
-
 
 class Consumer { 
 	constructor(provider) {
@@ -19,10 +17,13 @@ class Consumer {
 
 ctx
 	.register(Consumer)
+	// inject provider object into the constructor
 	.inject(ctx.provider);
 
 class MagiQ {
-	constructor(){ }
+	
+	constructor() { }
+	
 	importantMethod() {
 		assert(this.provider, 'should have a provider');
 		assert(this.consumer, 'should have a consumer');
@@ -30,7 +31,10 @@ class MagiQ {
 }
 
 ctx
+	//override default registration key
 	.register(MagiQ, "que")
+	// autowire these properties, so they could be 
+	// used by class methods  
 	.autowire(ctx.provider, ctx.consumer);
 
 class SuperLazy {
@@ -42,7 +46,9 @@ class SuperLazy {
 }
 
 ctx.register(SuperLazy)
-.inject(); //this will inject dependencies based on the names of the constructor parameters
+	// this will inject dependencies inferred from constructor 
+	// parameter names
+	.inject(); 
 
 module.exports = {
 

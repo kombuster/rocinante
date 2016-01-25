@@ -1,10 +1,13 @@
 {
   "name": "rocinante",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Minimalist Node.js IOC framework for ES6",
   "main": "index.js",
   "scripts": {
     "test": "gulp test"
+  },
+  "engines" : { 
+    "node" : ">=5.5.0" 
   },
   "repository": {
     "type": "git",
