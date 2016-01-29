@@ -6,7 +6,7 @@ const S = require('string');
 const assert = require('assert');
 const path = require('path');
 
-var descriptors = {};
+
 
 
 class TypeDescriptor {
@@ -22,7 +22,7 @@ class TypeDescriptor {
 		if (!this._inject.length) {
 			//use ctor parameters to inject
 			this._inject = this.typeInfo.constructorParameterNames.map(name => {
-				var descriptor = descriptors[name];
+				var descriptor = this.ctx.descriptors[name];
 				assert(descriptor, 'descriptor not found when injecting ' + name);
 				return descriptor.resolveShared();
 			});
@@ -78,7 +78,7 @@ function processType(type) {
 class Context {
 	constructor(baseDir) {
 		this.baseDir = baseDir || __dirname;
-		descriptors = {};
+		this.descriptors = {};
 	}
 
 	register(type, key) {
@@ -88,13 +88,14 @@ class Context {
 		}
 		var typeInfo = processType(type);
 		key = key || typeInfo.camelized;
+
 		typeInfo.key = key;
-		assert(descriptors[key] == null, 'key ' + key + ' is already in use');
+		assert(this.descriptors[key] == null, 'key ' + key + ' is already in use');
 		var descriptor = new TypeDescriptor(type, this, typeInfo);
-		descriptors[key] = descriptor;
+		this.descriptors[key] = descriptor;
 		Object.defineProperty(this, key, {
 			get:function() {
-				var descriptor = descriptors[key];
+				var descriptor = this.descriptors[key];
 				assert(descriptor, 'requested key ' + key + ' is not registered');
 				return descriptor.resolveShared();
 			},
