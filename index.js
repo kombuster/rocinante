@@ -81,6 +81,11 @@ class Context {
 		this.descriptors = {};
 	}
 
+	registerInstance(key, object) {
+		this[key] = object;
+		this[key].descriptor = { typeInfo: { key: key } };
+	}
+
 	register(type, key) {
 		if (typeof type === 'string') {
 			var source = path.resolve(this.baseDir,type);
